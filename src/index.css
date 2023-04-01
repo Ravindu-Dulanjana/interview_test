@@ -1,0 +1,31 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  height: 100vh;
+}
+
+.navbar {
+  display: flex;
+  background: rgb(204, 194, 194);
+}
+.nav-logo {
+  color: blueviolet;
+}
+
+.footer {
+  display: flex;
+}
+
+@media (max-width: 500px) {
+  .footer {
+    flex-direction: column;
+  }
+}
