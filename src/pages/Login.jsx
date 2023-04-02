@@ -1,97 +1,98 @@
-import { useState, useEffect } from "react";
-import { FaSignInAlt } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Spinner from "../components/Spinner";
-import { login, reset } from "../features/auth/authSlice";
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const initialValues = {
+  name: "Ravi",
+  email: "",
+};
+const onSubmit = (values) => {
+  console.log(values);
+};
+
+const validationSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  email: Yup.string().email("Enter valid email").required("Email is required"),
+});
 
 function Login() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+    validationSchema,
   });
-
-  const { email, password } = formData;
-
-  useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
-    if (isSuccess || user) {
-      navigate("/");
-    }
-
-    dispatch(reset());
-  }, [user, isError, message, navigate, dispatch, isSuccess]);
-
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const userData = {
-      email,
-      password,
-    };
-    dispatch(login(userData));
-  };
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   return (
     <>
-      <section className="heading">
-        <h1 className="center">
-          <FaSignInAlt />
-          Login
-        </h1>
-      </section>
-
-      <section className="form">
-        <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={email}
-              placeholder="Enter your email"
-              onChange={onChange}
-            />
+      <div className="login-container">
+        <div className="field" style={{ color: "white", textAlign: "center" }}>
+          <h1 className="is-size-3">Welcome Back</h1>
+          <h1>Login to your account</h1>
+        </div>
+        <form action="" className="form-login" onSubmit={formik.handleSubmit}>
+          <div className="field">
+            <h1
+              className="nav-logo title is-4 mb-0"
+              style={{ textAlign: "center" }}
+            >
+              ABC COMPANY
+            </h1>
           </div>
-          <div className="form-group">
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={password}
-              placeholder="Enter password"
-              onChange={onChange}
-            />
+          <div className="field">
+            <label className="label">User Name</label>
+            <div className="control">
+              <input
+                className={`input ${
+                  formik.errors.name && formik.touched.name ? "is-danger" : ""
+                } `}
+                type="text"
+                name="name"
+                {...formik.getFieldProps("name")}
+                placeholder="Enter username"
+              />
+            </div>
+            {formik.errors.name && formik.touched.name ? (
+              <p className="help is-danger">{formik.errors.name}</p>
+            ) : null}
           </div>
-
-          <div className="form-group">
-            <button type="submit" className="btn btn-block">
-              Submit
-            </button>
+          <div className="field">
+            <label className="label">Email</label>
+            <div className="control">
+              <input
+                className={`input ${
+                  formik.errors.email && formik.touched.email ? "is-danger" : ""
+                } `}
+                type="email"
+                placeholder="Enter Email"
+                name="email"
+                {...formik.getFieldProps("email")}
+              />
+            </div>
+            {formik.errors.email && formik.touched.email ? (
+              <p className="help is-danger">{formik.errors.email}</p>
+            ) : null}
+          </div>
+          <div className="field">
+            <p className="control">
+              <button className="button is-success" type="submit">
+                Login
+              </button>
+            </p>
+            <div className="control">
+              <h1 className="is-3" style={{ marginTop: 5 }}>
+                Still Have No account?{" "}
+                <b>
+                  {" "}
+                  <a href="/register" style={{ color: "#ff9900" }}>
+                    SIGNUP
+                  </a>{" "}
+                </b>{" "}
+                Now
+              </h1>
+            </div>
           </div>
         </form>
-      </section>
+      </div>
     </>
   );
 }

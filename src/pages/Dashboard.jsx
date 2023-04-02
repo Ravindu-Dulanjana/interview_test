@@ -1,10 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from "../components/Spinner";
+import Login from "./Login";
+import EditUser from "./EditUser";
 
 function Dashboard() {
-  useEffect(() => {}, []);
-
+  const [showEdit, setShowEdit] = useState(true);
+  if (showEdit) {
+    return <EditUser />;
+  }
   return (
     <>
       <div className="container is-max-desktop my-6">
@@ -23,21 +27,21 @@ function Dashboard() {
             </div>
           </div>
           <div className="mx-6-touch my-6">
-            <div class="columns is-multiline is-mobile">
-              <div class="column">E Mail Address</div>
-              <div class="column has-text-right">krdulanjana@gmail.com</div>
+            <div className="columns is-multiline is-mobile">
+              <div className="column">E Mail Address</div>
+              <div className="column has-text-right">krdulanjana@gmail.com</div>
             </div>
-            <div class="columns is-multiline is-mobile">
-              <div class="column">Name</div>
-              <div class="column has-text-right">Ravindu Dulanjana</div>
+            <div className="columns is-multiline is-mobile">
+              <div className="column">Name</div>
+              <div className="column has-text-right">Ravindu Dulanjana</div>
             </div>
-            <div class="columns is-multiline is-mobile">
-              <div class="column">Gender</div>
-              <div class="column has-text-right">Male</div>
+            <div className="columns is-multiline is-mobile">
+              <div className="column">Gender</div>
+              <div className="column has-text-right">Male</div>
             </div>
-            <div class="columns is-multiline is-mobile">
-              <div class="column">Date-of-Birth</div>
-              <div class="column has-text-right">1994-09-20</div>
+            <div className="columns is-multiline is-mobile">
+              <div className="column">Date-of-Birth</div>
+              <div className="column has-text-right">1994-09-20</div>
             </div>
           </div>
         </section>
