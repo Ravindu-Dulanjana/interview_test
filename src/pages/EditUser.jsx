@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { register, reset } from "../features/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { updateUserData } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 
@@ -40,8 +39,6 @@ function EditUser() {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
-
     const userData = {
       first_name: values.first_name,
       last_name: values.last_name,

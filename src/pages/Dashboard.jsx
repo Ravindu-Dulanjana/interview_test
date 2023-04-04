@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Spinner from "../components/Spinner";
 import add from "../assets/add.png";
-import Login from "./Login";
 import EditUser from "./EditUser";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getUser,
   reset,
@@ -36,6 +34,7 @@ function Dashboard() {
   }, [user_token, isError, message, navigate, dispatch, isSuccess]);
 
   const [showEdit, setShowEdit] = useState(false);
+
   const handleClick = () => {
     setShowEdit((pre) => !pre);
   };

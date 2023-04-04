@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { login, reset } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const dispatch = useDispatch();
@@ -30,7 +30,6 @@ function Login() {
     password: "",
   };
   const onSubmit = (values) => {
-    console.log(values);
     const userData = {
       username: values.email,
       password: values.password,
