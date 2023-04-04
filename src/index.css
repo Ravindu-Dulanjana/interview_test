@@ -77,4 +77,7 @@ body {
   .footer {
     flex-direction: column;
   }
+  .navbar {
+    flex-direction: column;
+  }
 }

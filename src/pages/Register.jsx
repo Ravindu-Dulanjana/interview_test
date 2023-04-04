@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { register, reset } from "../features/auth/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import check from "../assets/check_mark.png";
+import { toast } from "react-toastify";
 
 const initialValues = {
   first_name: "Ravi",
@@ -10,12 +15,9 @@ const initialValues = {
   mobile_number: "",
   email: "",
 };
-const onSubmit = (values) => {
-  console.log(values);
-};
 
 const validationSchema = Yup.object({
-  first_name: Yup.string().required("First is required"),
+  first_name: Yup.string().required("First name is required"),
   last_name: Yup.string().required("Last name is required"),
   email: Yup.string().email("Enter valid email").required("Email is required"),
   password: Yup.string().required("Password is required"),
@@ -34,6 +36,44 @@ const validationSchema = Yup.object({
 });
 
 function Register() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user_token, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+  const navigateHome = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      return;
+    }
+    if (isError) {
+      toast.error(message);
+    }
+
+    dispatch(reset());
+  }, [user_token, isError, message, navigate, dispatch, isSuccess]);
+
+  const onSubmit = (values) => {
+    const userData = {
+      client_id: import.meta.env.VITE_CLIENT_ID,
+      client_secret: import.meta.env.VITE_CLIENT_SECRET,
+      scope: "",
+      grant_type: "password",
+      first_name: values.first_name,
+      last_name: values.last_name,
+      password: values.password,
+      confirm_password: values.confirm_password,
+      mobile_number: values.mobile_number,
+      email: values.email,
+      dob: "1994-01-16",
+    };
+    dispatch(register(userData));
+  };
+
   const formik = useFormik({
     initialValues,
     onSubmit,
@@ -41,15 +81,45 @@ function Register() {
   });
 
   console.log(formik.errors);
+  if (isSuccess) {
+    return (
+      <>
+        <div className="login-container">
+          <div className="form-login ">
+            <div className="has-text-centered">
+              <img src={check} alt="" width={150} />
+            </div>
+            <div>
+              <h1 className="is-size-4 has-text-centered has-text-weight-bold">
+                Congratulations
+              </h1>
+            </div>
+            <div className="has-text-centered">
+              Your account has been Created Successfully
+            </div>
+            <div className="has-text-centered m-4">
+              <button
+                className="button is-success is-medium is-fullwidth"
+                onClick={navigateHome}
+              >
+                Go to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="login-container">
         <div className="field form-login-header" style={{ color: "white" }}>
           <h1 className="is-size-2">
             {" "}
-            <a href="/login" style={{ color: "white" }}>
+            <Link to="/login" style={{ color: "white" }}>
               {"<"}{" "}
-            </a>{" "}
+            </Link>{" "}
             Create Account
           </h1>
         </div>
@@ -75,6 +145,9 @@ function Register() {
                     placeholder="Enter first name"
                   />
                 </div>
+                {formik.errors.first_name && formik.touched.first_name ? (
+                  <p className="help is-danger">{formik.errors.first_name}</p>
+                ) : null}
               </div>
               <div className="field">
                 <label className="label">Last Name</label>
@@ -87,6 +160,9 @@ function Register() {
                     placeholder="Enter last name"
                   />
                 </div>
+                {formik.errors.last_name && formik.touched.last_name ? (
+                  <p className="help is-danger">{formik.errors.last_name}</p>
+                ) : null}
               </div>
             </div>
           </div>
@@ -109,6 +185,11 @@ function Register() {
                     />
                   </p>
                 </div>
+                {formik.errors.mobile_number && formik.touched.mobile_number ? (
+                  <p className="help is-danger">
+                    {formik.errors.mobile_number}
+                  </p>
+                ) : null}
               </div>
             </div>
           </div>
@@ -124,6 +205,9 @@ function Register() {
                 {...formik.getFieldProps("email")}
               />
             </div>
+            {formik.errors.email && formik.touched.email ? (
+              <p className="help is-danger">{formik.errors.email}</p>
+            ) : null}
           </div>
           <div className="field">
             <label className="label">Password</label>
@@ -136,6 +220,9 @@ function Register() {
                 placeholder="Enter password"
               />
             </div>
+            {formik.errors.password && formik.touched.password ? (
+              <p className="help is-danger">{formik.errors.password}</p>
+            ) : null}
           </div>
           <div className="field">
             <label className="label">Password</label>
@@ -148,11 +235,18 @@ function Register() {
                 placeholder="Enter password again"
               />
             </div>
+            {formik.errors.confirm_password &&
+            formik.touched.confirm_password ? (
+              <p className="help is-danger">{formik.errors.confirm_password}</p>
+            ) : null}
           </div>
 
           <div className="field">
             <p className="control">
-              <button className="button is-success" type="submit">
+              <button
+                className="button is-success is-medium is-fullwidth"
+                type="submit"
+              >
                 Create Account
               </button>
             </p>
